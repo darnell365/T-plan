@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T's Programme</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap');
+</style>
+<style>
+  :root {
+    --cream: #faf7f2;
+    --warm: #f0ebe1;
+    --blush: #e8d5c4;
+    --rose: #c9826a;
+    --deep: #3d2b1f;
+    --mid: #7a5c4f;
+    --light: #b89a8a;
+    --accent: #a85d44;
+    --green: #6b8c6e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--deep);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--deep);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,130,106,0.15) 0%, transparent 70%);
+    top: -100px; right: -100px;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(107,140,110,0.1) 0%, transparent 70%);
+    bottom: -80px; left: -80px;
+  }
+
+  .hero-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.1;
+    letter-spacing: -1px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+
+  .hero h1 span { color: var(--rose); font-style: italic; }
+
+  .hero-sub {
+    margin-top: 24px;
+    font-size: 15px;
+    color: var(--light);
+    max-width: 480px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 52px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat {
+    text-align: center;
+    border: 1px solid rgba(201,130,106,0.3);
+    padding: 20px 28px;
+    border-radius: 2px;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    color: var(--rose);
+    display: block;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--light);
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* NAV DOTS */
+  .nav-strip {
+    background: var(--warm);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    border-bottom: 1px solid var(--blush);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-strip::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    padding: 16px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--mid);
+    cursor: pointer;
+    border: none;
+    background: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* SECTIONS */
+  .section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 24px;
+    display: none;
+  }
+  .section.active { display: block; }
+
+  .section-tag {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 32px;
+    color: var(--deep);
+  }
+
+  .section-title em { color: var(--rose); font-style: italic; }
+
+  .prose {
+    font-size: 15px;
+    color: var(--mid);
+    max-width: 680px;
+    margin-bottom: 40px;
+  }
+
+  /* CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .card {
+    background: var(--warm);
+    border: 1px solid var(--blush);
+    padding: 24px;
+    border-radius: 2px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(61,43,31,0.08);
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--deep);
+  }
+  .card p { font-size: 13px; color: var(--mid); }
+
+  /* WORKOUT DAYS */
+  .day-block {
+    background: var(--warm);
+    border: 1px solid var(--blush);
+    border-radius: 2px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none;
+  }
+  .day-header:hover { background: var(--blush); }
+
+  .day-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 4px;
+  }
+  .day-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--deep);
+  }
+
+  .day-chevron {
+    font-size: 20px;
+    color: var(--rose);
+    transition: transform 0.3s;
+  }
+  .day-block.open .day-chevron { transform: rotate(180deg); }
+
+  .day-content {
+    display: none;
+    padding: 0 24px 24px;
+  }
+  .day-block.open .day-content { display: block; }
+
+  /* EXERCISE TABLE */
+  .ex-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  .ex-table th {
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--light);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--blush);
+    font-weight: 400;
+  }
+  .ex-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(232,213,196,0.4);
+    color: var(--mid);
+    vertical-align: middle;
+  }
+  .ex-table tr:last-child td { border-bottom: none; }
+  .ex-table tr:hover td { background: rgba(232,213,196,0.2); }
+
+  .ex-name { color: var(--deep); font-weight: 500; }
+
+  .yt-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--rose);
+    color: white;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 1px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .yt-btn:hover { background: var(--accent); }
+
+  /* PHASE BLOCKS */
+  .phase-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 600px) { .phase-row { grid-template-columns: 1fr; } }
+
+  .phase-card {
+    background: var(--deep);
+    color: var(--cream);
+    padding: 28px;
+    border-radius: 2px;
+  }
+  .phase-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    color: var(--rose);
+    line-height: 1;
+    margin-bottom: 8px;
+    opacity: 0.4;
+  }
+  .phase-title { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--light); margin-bottom: 10px; }
+  .phase-card p { font-size: 13px; color: rgba(250,247,242,0.7); }
+
+  /* DIET */
+  .diet-section {
+    background: var(--warm);
+    border: 1px solid var(--blush);
+    border-radius: 2px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .diet-section h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--deep);
+    margin-bottom: 16px;
+  }
+
+  .meal-list { list-style: none; }
+  .meal-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(232,213,196,0.5);
+    font-size: 14px;
+    color: var(--mid);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .meal-list li:last-child { border-bottom: none; }
+  .meal-list li::before { content: '—'; color: var(--rose); flex-shrink: 0; }
+
+  .allergy-banner {
+    background: #3d2b1f;
+    color: #fce8d5;
+    border-left: 3px solid var(--rose);
+    padding: 16px 20px;
+    font-size: 13px;
+    border-radius: 0 2px 2px 0;
+    margin-bottom: 24px;
+  }
+  .allergy-banner strong { color: var(--rose); }
+
+  /* PROGRESS TRACKER */
+  .tracker-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .week-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--light);
+    text-align: center;
+    padding-bottom: 8px;
+  }
+
+  .tracker-day {
+    aspect-ratio: 1;
+    background: var(--warm);
+    border: 1px solid var(--blush);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--light);
+    position: relative;
+  }
+  .tracker-day:hover { border-color: var(--rose); }
+  .tracker-day.done {
+    background: var(--rose);
+    border-color: var(--rose);
+    color: white;
+  }
+  .tracker-day.rest {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+
+  .log-form {
+    background: var(--warm);
+    border: 1px solid var(--blush);
+    padding: 28px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+  .log-form h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--deep);
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--light); }
+  .form-group input, .form-group select, .form-group textarea {
+    background: var(--cream);
+    border: 1px solid var(--blush);
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--deep);
+    border-radius: 1px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--rose);
+  }
+
+  .btn-primary {
+    background: var(--deep);
+    color: var(--cream);
+    border: none;
+    padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 1px;
+    transition: background 0.2s;
+    margin-top: 8px;
+  }
+  .btn-primary:hover { background: var(--accent); }
+
+  .log-entries { margin-top: 24px; }
+  .log-entry {
+    background: var(--cream);
+    border: 1px solid var(--blush);
+    padding: 16px 20px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .log-entry-date {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 4px;
+  }
+  .log-entry-body { font-size: 13px; color: var(--mid); }
+  .log-delete {
+    background: none;
+    border: none;
+    color: var(--light);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+  .log-delete:hover { color: var(--rose); }
+
+  .progress-bar-wrap {
+    background: var(--blush);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--rose), var(--accent));
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+
+  .progress-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .p-stat {
+    background: var(--warm);
+    border: 1px solid var(--blush);
+    padding: 18px;
+    text-align: center;
+    border-radius: 2px;
+  }
+  .p-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: var(--rose);
+    display: block;
+    line-height: 1;
+  }
+  .p-stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--light); margin-top: 6px; display: block; }
+
+  /* CARDIO */
+  .week-plan {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+  .week-day-card {
+    background: var(--warm);
+    border: 1px solid var(--blush);
+    padding: 14px 8px;
+    text-align: center;
+    border-radius: 2px;
+  }
+  .week-day-card.gym-day { border-color: var(--rose); background: rgba(201,130,106,0.08); }
+  .week-day-card.cardio-day { border-color: var(--green); background: rgba(107,140,110,0.08); }
+  .week-day-card.rest-day { opacity: 0.5; }
+  .wd-name { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--light); margin-bottom: 6px; }
+  .wd-type { font-size: 11px; color: var(--deep); font-weight: 500; }
+
+  /* TIPS */
+  .tip-row { display: grid; grid-template-columns: 40px 1fr; gap: 16px; align-items: start; margin-bottom: 20px; }
+  .tip-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    color: var(--rose);
+    opacity: 0.5;
+    line-height: 1;
+  }
+  .tip-text { font-size: 14px; color: var(--mid); padding-top: 4px; }
+  .tip-text strong { color: var(--deep); font-weight: 500; }
+
+  /* SAFETY BOX */
+  .safety-box {
+    background: var(--deep);
+    color: var(--cream);
+    padding: 28px;
+    border-radius: 2px;
+    margin-top: 40px;
+  }
+  .safety-box h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--rose);
+    margin-bottom: 12px;
+  }
+  .safety-box p { font-size: 13px; color: rgba(250,247,242,0.7); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .tracker-grid { grid-template-columns: repeat(4, 1fr); }
+    .week-plan { grid-template-columns: repeat(4, 1fr); }
+    .progress-stats { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">T's Personal Programme</div>
+  <h1>T's Path to a<br><span>Stronger Her</span></h1>
+  <p class="hero-sub">A beginner-friendly 3-day training split built around fat loss, endurance, and feeling your best — designed just for you.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">20</span><span class="stat-label">lbs Goal</span></div>
+    <div class="stat"><span class="stat-num">3×</span><span class="stat-label">Weekly Sessions</span></div>
+    <div class="stat"><span class="stat-num">~15<small style="font-size:18px">wk</small></span><span class="stat-label">Target Timeline</span></div>
+    <div class="stat"><span class="stat-num">60<small style="font-size:18px">min</small></span><span class="stat-label">Max Per Session</span></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav-strip">
+  <button class="nav-btn active" onclick="showSection('overview')">Overview</button>
+  <button class="nav-btn" onclick="showSection('workout')">Workout Plan</button>
+  <button class="nav-btn" onclick="showSection('cardio')">Cardio</button>
+  <button class="nav-btn" onclick="showSection('diet')">Nutrition</button>
+  <button class="nav-btn" onclick="showSection('education')">Education</button>
+  <button class="nav-btn" onclick="showSection('tracker')">Tracker</button>
+</nav>
+
+<!-- ===== OVERVIEW ===== -->
+<section id="overview" class="section active">
+  <div class="section-tag">Where We Begin</div>
+  <h2 class="section-title">Your Goals &<br><em>The Plan</em></h2>
+  <p class="prose">You're 5 ft tall, currently at a healthy weight, and your goal is to lose around 20 lbs of body fat by mid-June 2026 — roughly 15 weeks away. That means aiming for about 1–1.5 lbs per week, which is a safe and sustainable rate. This programme combines a 3-day resistance training split, daily walking, and clean low-carb eating to get you there.</p>
+
+  <div class="card-grid">
+    <div class="card"><span class="card-icon">🎯</span><div class="card-title">Primary Goal</div><p>Lose ~20 lbs of body fat, improving body composition and cardiovascular endurance by mid-June 2026.</p></div>
+    <div class="card"><span class="card-icon">💪</span><div class="card-title">Focus Areas</div><p>Back, arms, chest, and lower abs — building a toned, strong upper body alongside a leaner lower half.</p></div>
+    <div class="card"><span class="card-icon">⏱️</span><div class="card-title">Time Commitment</div><p>2–3 gym sessions per week, each 30–60 minutes. Plus daily walking targets of 7,000–10,000 steps.</p></div>
+    <div class="card"><span class="card-icon">🥗</span><div class="card-title">Eating Style</div><p>Low-carb, salad-friendly, nut-safe meals with a focus on protein and healthy fats.</p></div>
+  </div>
+
+  <div class="phase-row">
+    <div class="phase-card">
+      <div class="phase-num">01</div>
+      <div class="phase-title">Weeks 1–3 · Foundation</div>
+      <p>Learn every exercise with perfect form using light–moderate weights. No testing max effort yet. Build the habit.</p>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">02</div>
+      <div class="phase-title">Weeks 4+ · Progression</div>
+      <p>Begin tracking reps and progressing weights. When you hit the top of the rep range on all sets — go heavier next session.</p>
+    </div>
+  </div>
+
+  <div class="tip-row"><div class="tip-num">01</div><div class="tip-text"><strong>Progression Rule:</strong> Complete all sets at the top of the rep range → increase weight next session. Example: targeting 10–12 reps. Week 1: 10/10/9. Week 2: 11/10/10. Week 3: 12/12/12 → increase weight.</div></div>
+  <div class="tip-row"><div class="tip-num">02</div><div class="tip-text"><strong>RPE Target:</strong> Aim for RPE 7–8 (Rate of Perceived Exertion) — your last 2 reps should feel challenging but controlled. If it feels easy, go heavier.</div></div>
+  <div class="tip-row"><div class="tip-num">03</div><div class="tip-text"><strong>Daily Habits:</strong> 7,000–10,000 steps/day · 2L+ water · 7–8 hours sleep · limit sugary drinks.</div></div>
+
+  <div class="safety-box">
+    <h3>A Quick Note on Safety</h3>
+    <p>Before starting any new exercise or diet programme, it's always a good idea to check in with your GP or a registered dietitian — especially with nut allergies. Listen to your body at all times: if you feel pain, dizziness, or unusual breathlessness, stop and rest. Progress is built over weeks and months, not days.</p>
+  </div>
+</section>
+
+<!-- ===== WORKOUT ===== -->
+<section id="workout" class="section">
+  <div class="section-tag">3-Day Split</div>
+  <h2 class="section-title">Your Training<br><em>Programme</em></h2>
+  <p class="prose">Three focused sessions per week, each lasting 30–50 minutes. Every session ends with an optional 10–15 min incline treadmill walk for extra fat burning. Tap each day to expand.</p>
+
+  <!-- DAY 1 -->
+  <div class="day-block" onclick="toggleDay(this)">
+    <div class="day-header">
+      <div>
+        <div class="day-label">Day 1</div>
+        <div class="day-name">Back & Arms</div>
+      </div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-content">
+      <table class="ex-table">
+        <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Weight</th><th>Demo</th></tr></thead>
+        <tbody>
+          <tr><td class="ex-name">Lat Pulldown</td><td>3</td><td>10–12</td><td>35–55 lbs</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=lat+pulldown+form+beginner" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Seated Cable Row</td><td>3</td><td>10–12</td><td>35–55 lbs</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=seated+cable+row+form+beginner" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Dumbbell Bicep Curl</td><td>3</td><td>10–12</td><td>7–12 lbs</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=dumbbell+bicep+curl+form" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Tricep Pushdown</td><td>3</td><td>10–12</td><td>15–25 lbs</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=tricep+pushdown+cable+form" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Face Pulls</td><td>3</td><td>12–15</td><td>15–25 lbs</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=face+pulls+cable+form+beginner" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Hanging Knee Raises</td><td>3</td><td>10–15</td><td>Bodyweight</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=hanging+knee+raises+form" target="_blank">▶ Watch</a></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:var(--light);margin-top:16px;">✦ Optional finisher: 10–15 min incline treadmill walk at moderate pace</p>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day-block" onclick="toggleDay(this)">
+    <div class="day-header">
+      <div>
+        <div class="day-label">Day 2</div>
+        <div class="day-name">Lower Body & Core</div>
+      </div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-content">
+      <table class="ex-table">
+        <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Weight</th><th>Demo</th></tr></thead>
+        <tbody>
+          <tr><td class="ex-name">Goblet Squat</td><td>3</td><td>10–12</td><td>20–30 lbs</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=goblet+squat+form+beginner" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Romanian Deadlift (DB)</td><td>3</td><td>10–12</td><td>20–25 lbs each</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=dumbbell+romanian+deadlift+form" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Hip Thrust</td><td>3</td><td>10–12</td><td>45–65 lbs</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=hip+thrust+form+beginner" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Walking Lunges</td><td>2–3</td><td>10 each leg</td><td>BW–15 lbs</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=walking+lunges+form" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Cable Crunch</td><td>3</td><td>12–15</td><td>20–35 lbs</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=cable+crunch+form" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Plank</td><td>3</td><td>30–60 sec</td><td>Bodyweight</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=plank+form+core" target="_blank">▶ Watch</a></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:var(--light);margin-top:16px;">✦ Optional finisher: 10–15 min incline treadmill walk at moderate pace</p>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-block" onclick="toggleDay(this)">
+    <div class="day-header">
+      <div>
+        <div class="day-label">Day 3</div>
+        <div class="day-name">Chest, Arms & Core</div>
+      </div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-content">
+      <table class="ex-table">
+        <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Weight</th><th>Demo</th></tr></thead>
+        <tbody>
+          <tr><td class="ex-name">Dumbbell Bench Press</td><td>3</td><td>10–12</td><td>10–15 lbs each</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=dumbbell+bench+press+form+beginner" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Incline Dumbbell Press</td><td>3</td><td>10–12</td><td>10–15 lbs each</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=incline+dumbbell+press+form" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Lat Pulldown / Assisted Pull-up</td><td>3</td><td>8–10</td><td>35–55 lbs</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=assisted+pullup+machine+form" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Dumbbell Lateral Raise</td><td>3</td><td>12–15</td><td>5–10 lbs</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=lateral+raise+dumbbell+form" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Hammer Curl</td><td>3</td><td>10–12</td><td>10–15 lbs</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=hammer+curl+dumbbell+form" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Assisted Dips</td><td>3</td><td>8–10</td><td>Assistance machine</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=assisted+dips+machine+form" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Reverse Crunch</td><td>3</td><td>12–15</td><td>Bodyweight</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=reverse+crunch+form" target="_blank">▶ Watch</a></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:var(--light);margin-top:16px;">✦ Optional finisher: 10–15 min incline treadmill walk at moderate pace</p>
+    </div>
+  </div>
+
+  <div class="safety-box" style="margin-top:32px;">
+    <h3>Progression Example</h3>
+    <p>Targeting 10–12 reps per set: Session 1 → 10/10/9. Session 2 → 11/10/10. Session 3 → 12/12/12. Next session → increase weight by the smallest increment available. Start light. Form first, always.</p>
+  </div>
+</section>
+
+<!-- ===== CARDIO ===== -->
+<section id="cardio" class="section">
+  <div class="section-tag">Endurance & Fat Burn</div>
+  <h2 class="section-title">Cardio &<br><em>Daily Movement</em></h2>
+  <p class="prose">Cardiovascular fitness improves best with consistent, steady effort rather than occasional intense bursts. Because you're already comfortable with light walking, we'll build on that foundation gradually.</p>
+
+  <div style="margin-bottom:32px;">
+    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--light);margin-bottom:12px;">Sample Week</div>
+    <div class="week-plan">
+      <div class="week-day-card gym-day"><div class="wd-name">Mon</div><div class="wd-type">Gym Day 1</div></div>
+      <div class="week-day-card cardio-day"><div class="wd-name">Tue</div><div class="wd-type">Walk 7–10k steps</div></div>
+      <div class="week-day-card gym-day"><div class="wd-name">Wed</div><div class="wd-type">Gym Day 2</div></div>
+      <div class="week-day-card cardio-day"><div class="wd-name">Thu</div><div class="wd-type">Walk + Light Jog</div></div>
+      <div class="week-day-card gym-day"><div class="wd-name">Fri</div><div class="wd-type">Gym Day 3</div></div>
+      <div class="week-day-card cardio-day"><div class="wd-name">Sat</div><div class="wd-type">Active Rest</div></div>
+      <div class="week-day-card rest-day"><div class="wd-name">Sun</div><div class="wd-type">Full Rest</div></div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card"><span class="card-icon">🚶‍♀️</span><div class="card-title">Weeks 1–3</div><p>Walk 20–30 min daily at a brisk pace. Aim for 7,000 steps minimum. Add an incline treadmill walk after gym sessions.</p></div>
+    <div class="card"><span class="card-icon">🏃‍♀️</span><div class="card-title">Weeks 4–7</div><p>Begin walk/jog intervals: 2 min walk, 1 min light jog. Repeat for 20–30 min. Gradually extend jog intervals.</p></div>
+    <div class="card"><span class="card-icon">💨</span><div class="card-title">Weeks 8+</div><p>Aim for 20–30 min continuous light jog, or mix in cycling. Keep heart rate moderate — you should be able to talk in short sentences.</p></div>
+  </div>
+
+  <div style="margin-top:12px;">
+    <div class="tip-row"><div class="tip-num">01</div><div class="tip-text"><strong>Talk Test:</strong> Your cardio intensity is about right if you can say a short sentence but not hold a full conversation. That's your fat-burning zone.</div></div>
+    <div class="tip-row"><div class="tip-num">02</div><div class="tip-text"><strong>Incline Walk Finisher:</strong> After each gym session, hop on the treadmill at an incline of 10–12% and walk at 3–3.5 mph for 10–15 minutes. This is highly effective for fat loss without taxing recovery.</div></div>
+    <div class="tip-row"><div class="tip-num">03</div><div class="tip-text"><strong>Step Count:</strong> 7,000–10,000 steps daily outside the gym is one of the single most effective fat-loss tools available. Use a phone pedometer or fitness watch.</div></div>
+    <div class="tip-row"><div class="tip-num">04</div><div class="tip-text"><strong>Rest:</strong> At least one full rest day per week. Sleep is when your body actually burns fat and rebuilds muscle. Prioritise 7–8 hours.</div></div>
+  </div>
+</section>
+
+<!-- ===== DIET ===== -->
+<section id="diet" class="section">
+  <div class="section-tag">Fuel Your Progress</div>
+  <h2 class="section-title">Nutrition<br><em>Guide</em></h2>
+  <p class="prose">Food is the biggest lever in fat loss — roughly 80% of results come from what you eat. The goal is high protein, balanced healthy carbs, and meals you genuinely enjoy. These aren't strict rules — they're smart combinations to build around your preferred foods.</p>
+
+  <div class="allergy-banner">
+    ⚠️ <strong>Allergy Alert:</strong> This plan strictly avoids almonds and tree nuts in all forms — including almond flour, almond milk, mixed nuts, and pesto. Always check labels. When eating out, flag your allergy with the restaurant.
+  </div>
+
+  <!-- CALORIE BASICS -->
+  <div class="diet-section">
+    <h3>🔢 Loose Calorie Tracking — Super Simple</h3>
+    <p style="font-size:14px;color:var(--mid);margin-bottom:16px;">Think of calories like a daily budget. You don't need to count every single thing — just be aware of the big picture. Here's all you need to know:</p>
+    <ul class="meal-list">
+      <li><strong>Your rough daily target:</strong> Around 1,400–1,600 calories to lose fat steadily. Eat more on gym days, less on rest days — naturally.</li>
+      <li><strong>Protein = 80–100g per day.</strong> Each gram of protein = 4 calories. Aim for a palm-sized portion of protein at every meal.</li>
+      <li><strong>Plate rule:</strong> Half the plate = veg. Quarter = protein. Quarter = healthy carbs (sweet potato, oats, rice). Add a thumb-sized amount of healthy fat (avocado, olive oil).</li>
+      <li><strong>Don't stress the numbers</strong> — if you're eating whole foods, hitting protein, and not drinking calories, you're already doing it right.</li>
+    </ul>
+  </div>
+
+  <!-- FAVOURITE PROTEINS -->
+  <div class="diet-section">
+    <h3>🥩 Preferred Proteins</h3>
+    <ul class="meal-list">
+      <li><strong>NY Strip / Sirloin Steak</strong> — ~250–300 cal for a 6oz cut, ~35g protein. Grill or pan sear. Pair with sweet potato and salad. Iron-rich and deeply satisfying.</li>
+      <li><strong>Sardines</strong> — one of the best fat-loss foods around. ~200 cal per tin, ~25g protein, loaded with omega-3. On salad, on crackers, or straight from the tin.</li>
+      <li><strong>Beef Mince (Ground Beef)</strong> — use lean 5% fat or extra-lean. ~200 cal per 100g, ~26g protein. Season simply with garlic, cumin, paprika. Use in lettuce wraps, bowls, or with sweet potato mash.</li>
+      <li><strong>Eggs</strong> — ~70 cal each, ~6g protein. Scramble, boil, or make a 3-egg omelette. Quick, cheap, filling.</li>
+      <li><strong>Chicken breast or thigh</strong> — your reliable everyday protein. Grill, bake, or cook in mince-style for variety.</li>
+    </ul>
+  </div>
+
+  <!-- HEALTHY CARBS -->
+  <div class="diet-section">
+    <h3>🍠 Healthy Carbs — Your Energy Source</h3>
+    <p style="font-size:14px;color:var(--mid);margin-bottom:14px;">Carbs aren't the enemy — the <em>wrong</em> carbs at the wrong time are. These are your go-to options:</p>
+    <ul class="meal-list">
+      <li><strong>Sweet Potato</strong> ⭐ — ~100 cal per medium potato, high in fibre, keeps you full for hours. Roast, mash, or slice into wedges. Best eaten post-workout when your body uses the carbs for recovery.</li>
+      <li><strong>Oats</strong> — slow-release energy, perfect for breakfast. ~150 cal per portion. Use as the base for your yoghurt bowls.</li>
+      <li><strong>Brown rice or quinoa</strong> — use in small portions (½ cup cooked) alongside protein and veg.</li>
+      <li><strong>Fruit</strong> — natural sugars are fine in moderation. Berries (lowest sugar), banana (great pre-workout), mango for a treat.</li>
+    </ul>
+  </div>
+
+  <!-- YOGHURT BOWLS -->
+  <div class="diet-section">
+    <h3>🫙 Greek Yoghurt Bowls — A Go-To Meal</h3>
+    <p style="font-size:14px;color:var(--mid);margin-bottom:14px;">These are perfect as breakfast, a post-workout snack, or dessert. Mix and match:</p>
+    <ul class="meal-list">
+      <li><strong>Base:</strong> Full-fat or 2% Greek yoghurt (~150–180 cal, ~15–20g protein per cup) — always check it's nut-free</li>
+      <li><strong>Sweetener:</strong> A drizzle of honey (~20 cal per tsp) — keeps it natural and delicious</li>
+      <li><strong>Oats:</strong> 2–3 tbsp rolled oats for texture and slow-release carbs (~60 cal)</li>
+      <li><strong>Fruit combos:</strong> Strawberries + honey · Blueberries + oats · Mango + a pinch of cinnamon · Banana + oats (great pre-gym)</li>
+      <li><strong>Add-ins:</strong> Chia seeds, a pinch of cinnamon, sunflower seeds (nut-safe) for extra texture</li>
+    </ul>
+  </div>
+
+  <!-- TEAS -->
+  <div class="diet-section">
+    <h3>🍵 Recommended Teas</h3>
+    <ul class="meal-list">
+      <li><strong>Black Tea</strong> — zero calories, gentle caffeine boost for energy and focus. Great pre-workout or with breakfast.</li>
+      <li><strong>Green Tea</strong> — contains EGCG, a compound shown to mildly support fat burning. 2–3 cups per day is ideal. Excellent between meals.</li>
+      <li><strong>Spearmint Tea</strong> — caffeine-free, great for digestion and reducing bloating. Perfect after dinner or before bed.</li>
+      <li><strong>All three</strong> count toward your 2L daily fluid target. Keep them unsweetened or with just a tiny bit of honey.</li>
+    </ul>
+  </div>
+
+  <!-- MEAL COMBOS -->
+  <div class="diet-section">
+    <h3>🍽️ Recommended Meal Combos</h3>
+    <p style="font-size:13px;color:var(--light);margin-bottom:16px;">These aren't a strict meal plan — pick what works for you that day.</p>
+    <ul class="meal-list">
+      <li><strong>Morning:</strong> Greek yoghurt bowl (oats + berries + honey) + black or green tea</li>
+      <li><strong>Pre-gym:</strong> Banana + Greek yoghurt, or oats with honey 60–90 min before</li>
+      <li><strong>Post-gym lunch:</strong> Sirloin steak + roasted sweet potato wedges + side salad with olive oil</li>
+      <li><strong>Easy lunch:</strong> Sardines on salad (romaine, cucumber, cherry tomatoes, lemon dressing) — no cooking needed</li>
+      <li><strong>Dinner:</strong> Beef mince bowl — seasoned mince, sweet potato mash, steamed broccoli or green beans</li>
+      <li><strong>Evening snack:</strong> Greek yoghurt + honey + cinnamon, or 2 boiled eggs, or spearmint tea if not hungry</li>
+    </ul>
+  </div>
+
+  <div class="diet-section">
+    <h3>💧 Daily Non-Negotiables</h3>
+    <ul class="meal-list">
+      <li>2L+ still water daily — start every morning with a full glass before anything else. Still water is gentler on digestion than sparkling.</li>
+      <li>Protein at every meal — this is the single most important rule for fat loss and keeping hunger under control.</li>
+      <li>No sugary drinks — swap fizzy drinks for still water, herbal teas, or water with fresh lemon (avoid carbonated soft drinks where possible).</li>
+      <li><strong>Eat slowly and chew properly</strong> — take at least 15–20 minutes per meal. Your body absorbs far more nutrients, you feel fuller on less food, and your gut works much more comfortably.</li>
+      <li>3 meals + 1 snack — skipping meals usually leads to overeating later and disrupts gut rhythm.</li>
+      <li>Sleep 7–8 hours — this is when fat is actually burned, muscle is built, and your digestive system fully resets.</li>
+      <li><strong>Support your gut:</strong> Greek yoghurt, kefir, and fermented foods contain probiotics — directly linked to better metabolism, mood, and digestion.</li>
+    </ul>
+  </div>
+
+  <div class="safety-box">
+    <h3>Professional Guidance</h3>
+    <p>Given your nut allergies, it's strongly recommended to consult a registered dietitian before making major dietary changes. They can review labels, flag hidden allergens, and personalise your exact calorie target. This plan is a solid starting framework — a professional can fine-tune it for you specifically.</p>
+  </div>
+</section>
+
+<!-- ===== EDUCATION ===== -->
+<section id="education" class="section">
+  <div class="section-tag">Know Your Body</div>
+  <h2 class="section-title">The Education<br><em>Corner</em></h2>
+  <p class="prose">Understanding <em>why</em> things work makes it so much easier to stay consistent. Here's everything you need to know — explained simply, no jargon.</p>
+
+  <!-- GOKU QUOTE -->
+  <div style="background:var(--deep);border-left:3px solid var(--rose);padding:28px 32px;border-radius:2px;margin-bottom:48px;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-10px;right:20px;font-size:80px;opacity:0.05;font-family:'Cormorant Garamond',serif;">龍</div>
+    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rose);margin-bottom:12px;">— Son Goku</div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,28px);color:var(--cream);font-style:italic;line-height:1.4;">"I am the hope of the universe. I am the answer to all living things that cry out for peace. I am protector of the innocent. I am the light in the darkness. I am truth."</p>
+    <p style="font-size:13px;color:var(--light);margin-top:16px;">You don't have to be the strongest in the room. Just show up, do the work, and keep going. That's the Saiyan way. 🔥</p>
+  </div>
+
+  <!-- FOOD & ENERGY -->
+  <div class="section-tag" style="margin-top:8px;">How Food Affects You</div>
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:24px;">Food & <em style="color:var(--rose);">Energy Levels</em></h3>
+  <p class="prose">Different foods hit your body at different speeds. Think of it like fuel grades — some burn fast, some burn slow.</p>
+
+  <div class="card-grid" style="margin-bottom:32px;">
+    <div class="card">
+      <span class="card-icon">⚡</span>
+      <div class="card-title">Fast Energy</div>
+      <p>Fruit, honey, white rice, bananas. These digest quickly and give you a burst of energy — great <strong>before a workout</strong> (30–60 min prior). The downside: they fade fast and can leave you hungry sooner.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔋</span>
+      <div class="card-title">Slow Energy</div>
+      <p>Sweet potato, oats, Greek yoghurt, brown rice. These release energy steadily for hours — ideal for <strong>breakfast or lunch</strong>. They keep you fuller longer and prevent energy crashes.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🏗️</span>
+      <div class="card-title">Building Blocks</div>
+      <p>Steak, sardines, eggs, mince, Greek yoghurt. Protein doesn't give you a quick energy hit — it repairs and builds muscle after training and keeps hunger under control all day.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🧠</span>
+      <div class="card-title">Brain & Mood Food</div>
+      <p>Sardines, eggs, avocado, olive oil. Healthy fats keep your brain sharp, support hormone balance, and actually help your body burn stored fat more efficiently. Don't skip them.</p>
+    </div>
+  </div>
+
+  <!-- TEA ROLODEX -->
+  <div class="section-tag" style="margin-top:48px;">The Tea Rolodex</div>
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:8px;">Teas & What They <em style="color:var(--rose);">Actually Do</em></h3>
+  <p class="prose" style="margin-bottom:24px;">Tea is one of the most underrated wellness tools out there. Different teas do completely different things — here's your full guide, including which ones to reach for and when.</p>
+
+  <div style="display:grid;gap:14px;margin-bottom:40px;">
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Your Teas · Daily Staples</div><div class="day-name">☕ Black Tea</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>Best for:</strong> Energy, focus, pre-workout lift</li>
+          <li><strong>When to drink:</strong> Morning or 30–45 min before training</li>
+          <li><strong>What it does:</strong> Contains caffeine + L-theanine — gives you clean, focused energy without the jitteriness of coffee. Also supports heart health and gut bacteria diversity.</li>
+          <li><strong>Bonus:</strong> Zero calories. Counts toward your daily fluid intake. A small amount of tannins in black tea can aid digestion when drunk after meals.</li>
+          <li><strong>Tip:</strong> Don't add sugar. A small splash of oat milk is fine if needed.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Your Teas · Daily Staples</div><div class="day-name">🍃 Green Tea</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>Best for:</strong> Fat burning, metabolism, antioxidants</li>
+          <li><strong>When to drink:</strong> Mid-morning or between meals, 2–3 cups daily</li>
+          <li><strong>What it does:</strong> Contains EGCG — a compound that helps your body use stored fat as fuel, especially during exercise. Also reduces inflammation and supports brain function.</li>
+          <li><strong>Bonus:</strong> Gentle on the stomach. Great replacement for a second coffee. Supports skin health too.</li>
+          <li><strong>Tip:</strong> Brew at 80°C not boiling — boiling water makes green tea bitter. Steep 2–3 minutes max.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Your Teas · Daily Staples</div><div class="day-name">🌿 Spearmint Tea</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>Best for:</strong> Digestion, bloating, winding down after meals</li>
+          <li><strong>When to drink:</strong> After dinner or any meal — especially heavier ones</li>
+          <li><strong>What it does:</strong> Relaxes the muscles of the digestive tract, helping food move through more comfortably. Reduces gas and bloating naturally. Also supports hormonal balance in women.</li>
+          <li><strong>Bonus:</strong> Caffeine-free — perfect for evenings. Also great for skin clarity and reducing inflammation.</li>
+          <li><strong>Tip:</strong> Drink slowly after eating, not during. Let the meal settle first, then sip.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Recommended Addition</div><div class="day-name">🫚 Ginger Tea</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>Best for:</strong> Digestion, nausea, post-meal comfort, inflammation</li>
+          <li><strong>When to drink:</strong> After meals or when you feel bloated or unsettled</li>
+          <li><strong>What it does:</strong> One of the most powerful digestive aids in nature. Speeds up stomach emptying, reduces gas, and soothes the gut lining. Also a strong anti-inflammatory — great for muscle soreness after training.</li>
+          <li><strong>Bonus:</strong> Supports immune health. A slice of fresh ginger in hot water with a squeeze of lemon and a tiny drop of honey is one of the best things you can drink.</li>
+          <li><strong>Tip:</strong> Fresh ginger root is stronger than teabags. Slice a coin-sized piece, steep in hot water for 5 minutes.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Recommended Addition</div><div class="day-name">🌸 Peppermint Tea</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>Best for:</strong> Digestive ease, bloating, freshening up after meals</li>
+          <li><strong>When to drink:</strong> After meals, especially lunch or dinner</li>
+          <li><strong>What it does:</strong> The menthol in peppermint relaxes the muscles of the gastrointestinal tract, letting trapped gas pass more easily and reducing that full, uncomfortable feeling after eating. Also reduces nausea.</li>
+          <li><strong>Bonus:</strong> Natural breath freshener. Caffeine-free. Also shown to mildly boost exercise performance when inhaled — some people sip it before the gym for this reason.</li>
+          <li><strong>Tip:</strong> Spearmint and peppermint are a great pair — alternate them in the evenings depending on what you fancy.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Recommended Addition</div><div class="day-name">🌼 Chamomile Tea</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>Best for:</strong> Sleep, stress, evening wind-down</li>
+          <li><strong>When to drink:</strong> 30–60 minutes before bed</li>
+          <li><strong>What it does:</strong> Contains apigenin, a compound that binds to receptors in the brain to promote relaxation and sleepiness. Better sleep = better fat loss, better recovery, and lower cortisol (the stress hormone that causes belly fat).</li>
+          <li><strong>Bonus:</strong> Also soothes the gut lining and reduces digestive discomfort overnight. A natural alternative to sleeping aids.</li>
+          <li><strong>Tip:</strong> Add a small drizzle of honey for a bedtime treat that tastes like a hug in a cup.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Bonus Tea</div><div class="day-name">🍋 Lemon & Ginger (Hot Water)</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>Best for:</strong> Morning gut reset, digestion, immune system</li>
+          <li><strong>When to drink:</strong> First thing in the morning, before food</li>
+          <li><strong>What it does:</strong> Kick-starts digestion, hydrates the body after sleep, and the lemon provides vitamin C and supports liver function. Ginger adds anti-inflammatory and digestive benefits.</li>
+          <li><strong>Bonus:</strong> Starting the day with warm water (before coffee or tea) is one of the best habits for consistent energy and gut health throughout the day.</li>
+          <li><strong>Tip:</strong> Squeeze half a lemon, add a slice of fresh ginger, fill with hot (not boiling) water. Done. Takes 30 seconds.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- QUICK REFERENCE -->
+  <div class="diet-section">
+    <h3>📋 Quick Tea Reference — What to Reach For & When</h3>
+    <ul class="meal-list">
+      <li><strong>Tired & need a boost:</strong> Black tea or green tea (morning / pre-gym)</li>
+      <li><strong>After a big meal, feeling full:</strong> Spearmint, peppermint, or ginger tea</li>
+      <li><strong>Bloated or gassy:</strong> Ginger tea or peppermint tea — sip slowly</li>
+      <li><strong>Can't sleep / feeling wired:</strong> Chamomile tea 30–60 min before bed</li>
+      <li><strong>First thing in the morning:</strong> Warm lemon & ginger water before anything else</li>
+      <li><strong>Between meals, want something warm:</strong> Green tea — supports fat burning passively</li>
+      <li><strong>After dinner, sweet craving:</strong> Spearmint or chamomile with a tiny drop of honey</li>
+      <li><strong>Feeling run down or sore:</strong> Ginger tea — anti-inflammatory and immune boosting</li>
+    </ul>
+  </div>
+
+  <div class="diet-section">
+    <h3>📉 Why Your Preferred Foods Actually Help Fat Loss</h3>
+    <ul class="meal-list">
+      <li><strong>Sweet potato:</strong> High fibre slows digestion, preventing blood sugar spikes that lead to fat storage. The natural sweetness also satisfies cravings.</li>
+      <li><strong>Sardines:</strong> Omega-3 fats actively reduce inflammation from training, helping your body recover faster and burn fat more efficiently.</li>
+      <li><strong>Sirloin steak:</strong> High in creatine and iron — supports muscle repair and keeps energy levels up. Lean cuts mean high protein without excessive fat.</li>
+      <li><strong>Greek yoghurt:</strong> Probiotics support gut health, which is directly linked to metabolism, mood, and how well your body absorbs nutrients.</li>
+      <li><strong>Beef mince:</strong> Zinc and B12 in red meat support testosterone (yes, even in women — it matters for muscle and energy) and red blood cell production.</li>
+    </ul>
+  </div>
+
+  <!-- RECOVERY -->
+  <div class="section-tag" style="margin-top:48px;">Recovery & Rest</div>
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:24px;">Training <em style="color:var(--rose);">Recovery</em></h3>
+  <p class="prose" style="margin-bottom:28px;">Getting fitter doesn't happen <em>during</em> your workout — it happens in the hours afterwards. Recovery is where the real progress is made.</p>
+
+  <div class="card-grid" style="margin-bottom:32px;">
+    <div class="card"><span class="card-icon">😴</span><div class="card-title">Sleep</div><p>7–8 hours is non-negotiable. Growth hormone (which burns fat AND builds muscle) is mostly released during deep sleep. Bad sleep = slower results, more cravings, lower energy.</p></div>
+    <div class="card"><span class="card-icon">💧</span><div class="card-title">Hydration</div><p>Muscles are ~75% water. Being even slightly dehydrated reduces strength and endurance by up to 10%. Drink 2L+ daily, more on gym days.</p></div>
+    <div class="card"><span class="card-icon">🍽️</span><div class="card-title">Post-Workout Meal</div><p>Eat within 60–90 minutes of training. Protein + a healthy carb (like sweet potato) is the ideal combo — protein repairs, carbs replenish.</p></div>
+    <div class="card"><span class="card-icon">🚶‍♀️</span><div class="card-title">Active Rest</div><p>On rest days, light walking is better than doing nothing. It keeps blood flowing to sore muscles, reduces stiffness, and burns extra calories without stressing the body.</p></div>
+  </div>
+
+  <!-- RECOVERY METHODS -->
+  <div class="section-tag" style="margin-top:48px;">Recovery Methods</div>
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:8px;">Beyond the Gym — <em style="color:var(--rose);">How to Recover</em></h3>
+  <p class="prose" style="margin-bottom:24px;">The best athletes in the world spend as much time on recovery as they do on training. These tools aren't luxuries — they're part of the programme. Use what's accessible to you and build from there.</p>
+
+  <div style="display:grid;gap:14px;margin-bottom:40px;">
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Heat Therapy</div><div class="day-name">🧖‍♀️ Sauna</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>What happens:</strong> Heat causes blood vessels to dilate, dramatically increasing blood flow to muscles. This flushes out waste products (like lactic acid) that build up during exercise and delivers fresh oxygen and nutrients to recovering tissue.</li>
+          <li><strong>Fat loss benefit:</strong> A 20-minute sauna session can raise your heart rate similarly to a light walk. Over time, regular sauna use is linked to improved cardiovascular health and increased growth hormone — the hormone responsible for fat burning and muscle repair.</li>
+          <li><strong>Soreness relief:</strong> The heat relaxes muscle fibres and reduces the stiffness felt 24–48 hours after a hard session (called DOMS — delayed onset muscle soreness).</li>
+          <li><strong>Mental benefit:</strong> Sauna triggers endorphin release — the same feel-good chemicals as exercise. Great for stress reduction and mental reset.</li>
+          <li><strong>When to use:</strong> Best on rest days or after a training session (not before). Start with 10–15 minutes at a comfortable heat. Stay hydrated — drink water before and after.</li>
+          <li><strong>How often:</strong> Even once a week makes a meaningful difference. 2–3 times is ideal if accessible.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Heat Therapy</div><div class="day-name">💨 Steam Room</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>What happens:</strong> Similar to a sauna but uses moist heat (100% humidity). The steam opens up airways and pores, making it particularly effective for respiratory health and skin.</li>
+          <li><strong>Recovery benefit:</strong> The moist heat penetrates muscles more gently than dry sauna heat — great for people who find saunas too intense. Loosens tight muscles and joints effectively.</li>
+          <li><strong>Breathing benefit:</strong> Steam inhalation clears airways and can improve oxygen delivery — directly supporting cardio endurance over time.</li>
+          <li><strong>Skin & detox:</strong> Opens pores and promotes sweating, which helps clear skin and supports the body's natural detox processes. Especially noticeable after a few weeks of consistency.</li>
+          <li><strong>When to use:</strong> After training, or on rest days. 10–15 minutes is enough. Don't stay in if you feel dizzy or too hot.</li>
+          <li><strong>Sauna vs Steam:</strong> Both are excellent. Sauna = slightly more intense, better for muscle recovery and growth hormone. Steam = gentler, better for breathing, skin, and joint stiffness. Use whichever is available — or alternate.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Bodywork</div><div class="day-name">💆‍♀️ Massage</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>What happens:</strong> Massage physically breaks up adhesions (knots) in muscle tissue, increases localised blood flow, and stimulates the lymphatic system — which removes waste and reduces swelling.</li>
+          <li><strong>Soreness relief:</strong> Shown in studies to significantly reduce DOMS (that deep aching soreness 1–2 days after training). A sports massage within 24 hours of a hard session can cut recovery time noticeably.</li>
+          <li><strong>Performance benefit:</strong> Regular massage keeps muscle tissue healthy, elastic, and less prone to injury. Over a 15-week programme, this matters a lot.</li>
+          <li><strong>Mental benefit:</strong> Reduces cortisol (stress hormone) and raises serotonin and dopamine — improving mood, motivation, and sleep quality.</li>
+          <li><strong>Types to consider:</strong> Sports massage (deeper, targets specific muscles), Swedish massage (full-body relaxation, great for stress), or even a self-massage with a foam roller or massage gun at home.</li>
+          <li><strong>How often:</strong> Once every 2–4 weeks professionally is ideal. Self-massage with a foam roller after every session is free and very effective.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Cold Therapy</div><div class="day-name">🧊 Cold Shower / Ice Bath</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>What happens:</strong> Cold causes blood vessels to constrict, reducing inflammation and swelling in muscle tissue. When you warm up again, vessels dilate and rush fresh blood to the area — like a pumping action for recovery.</li>
+          <li><strong>Soreness relief:</strong> Cold exposure after intense training reduces acute muscle soreness and swelling. Athletes have used ice baths for decades for this reason.</li>
+          <li><strong>Mental benefit:</strong> Cold showers trigger a large release of noradrenaline — a neurotransmitter linked to focus, energy, and mood. Even a 30-second cold blast at the end of a warm shower is enough to feel the effect.</li>
+          <li><strong>Fat loss bonus:</strong> Cold exposure activates brown fat tissue — a type of fat that burns calories to generate heat. Regular cold exposure can modestly boost metabolism over time.</li>
+          <li><strong>How to start:</strong> Don't jump straight into an ice bath. Start by ending your normal shower with 30 seconds of cold water. Gradually extend to 2–3 minutes over a few weeks. Take slow, controlled breaths — don't panic.</li>
+          <li><strong>Note:</strong> Avoid cold therapy immediately before training — it can blunt performance. Best used post-training or on rest days.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Bodywork</div><div class="day-name">🛞 Foam Rolling</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>What happens:</strong> Foam rolling is a form of self-myofascial release — it puts pressure on tight spots in the muscle and fascia (the connective tissue around muscles), helping them relax and lengthen.</li>
+          <li><strong>Why it works:</strong> Sitting, training, and everyday movement creates tension knots in muscles. Rolling over these areas stimulates sensory receptors that tell the nervous system to relax the tissue.</li>
+          <li><strong>Best areas to roll:</strong> Quads, hamstrings, glutes, upper back, and calves — especially after leg day or any session involving squats, lunges, or hip thrusts.</li>
+          <li><strong>How to do it:</strong> Slow, controlled rolls — when you find a tender spot, pause and hold gentle pressure for 20–30 seconds rather than rolling quickly over it. That pause is where the release happens.</li>
+          <li><strong>When to use:</strong> After training as part of your cooldown, or on rest days for 5–10 minutes while watching TV. Zero cost and can be done at home.</li>
+          <li><strong>Equipment:</strong> A basic foam roller costs £10–20 and lasts years. A massage gun is great if available but not essential.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Daily Habit</div><div class="day-name">🛁 Epsom Salt Bath</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>What happens:</strong> Epsom salts are magnesium sulphate. Soaking in warm water with Epsom salts allows magnesium to be absorbed through the skin — and magnesium is one of the most important minerals for muscle relaxation and recovery.</li>
+          <li><strong>Why it matters:</strong> Most people are mildly deficient in magnesium, especially those who exercise. Low magnesium = more muscle cramps, worse sleep, higher stress levels, and slower recovery.</li>
+          <li><strong>Recovery benefit:</strong> Reduces muscle cramps, eases tension, and promotes deep relaxation. The warm water also provides the same circulatory benefits as a steam room.</li>
+          <li><strong>Sleep benefit:</strong> A warm bath 1–2 hours before bed has been shown to improve sleep onset and quality — partly from the magnesium, partly from the body cooling down afterwards (which signals sleep time).</li>
+          <li><strong>How to use:</strong> Add 2 cups of Epsom salts to a warm bath. Soak for 20 minutes. Available at any pharmacy for a few pounds.</li>
+          <li><strong>When to use:</strong> After a hard training session, or on a rest day evening before bed. A simple, inexpensive recovery tool most people overlook.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day-block" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div><div class="day-label">Daily Habit</div><div class="day-name">🧘‍♀️ Breathwork & Meditation</div></div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-content">
+        <ul class="meal-list">
+          <li><strong>What happens:</strong> Slow, controlled breathing activates the parasympathetic nervous system — your body's "rest and digest" mode. This is the opposite of the "fight or flight" state your body enters during exercise and stress.</li>
+          <li><strong>Recovery benefit:</strong> Getting into parasympathetic mode faster after training accelerates recovery, reduces cortisol, and improves how efficiently your body repairs muscle tissue.</li>
+          <li><strong>Fat loss link:</strong> High cortisol (chronic stress) directly causes the body to store fat — particularly around the midsection. Managing stress is a real, underrated fat loss tool.</li>
+          <li><strong>Simple technique — Box Breathing:</strong> Inhale for 4 counts → hold for 4 → exhale for 4 → hold for 4. Repeat 5–8 times. Takes 3 minutes. Immediately calming.</li>
+          <li><strong>Apps to try:</strong> Headspace, Calm, or simply a YouTube "5-minute meditation" search. You don't need to sit cross-legged — lying on your back works perfectly.</li>
+          <li><strong>When to use:</strong> After training as part of cooldown, before bed, or any time you feel stressed or overwhelmed. Even 5 minutes makes a measurable difference.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="diet-section">
+    <h3>📋 Recovery Quick Reference — What to Use & When</h3>
+    <ul class="meal-list">
+      <li><strong>After a hard gym session:</strong> Foam roll, cold shower, protein meal within 90 min</li>
+      <li><strong>Very sore muscles next day:</strong> Epsom salt bath, gentle walk, ginger tea</li>
+      <li><strong>Rest day recovery:</strong> Sauna or steam room, full body stretch flow, chamomile tea before bed</li>
+      <li><strong>Feeling stressed or can't switch off:</strong> Box breathing, chamomile tea, warm bath</li>
+      <li><strong>Low budget options:</strong> Cold shower + foam roller + Epsom salts — all under £20 total and highly effective</li>
+      <li><strong>Treat yourself option:</strong> Sports massage every 2–4 weeks — worth every penny for recovery and motivation</li>
+    </ul>
+  </div>
+
+  <!-- STRETCH ROUTINES -->
+  <div class="section-tag" style="margin-top:48px;">Mobility & Stretching</div>
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:8px;">Stretch <em style="color:var(--rose);">Routines</em></h3>
+  <p class="prose" style="margin-bottom:24px;">A 5-minute warm-up before and a 5-minute cooldown after every session. Tap each routine to expand.</p>
+
+  <div class="day-block" onclick="toggleDay(this)">
+    <div class="day-header">
+      <div><div class="day-label">Pre-Session · 5 Minutes</div><div class="day-name">Warm-Up Routine</div></div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-content">
+      <p style="font-size:13px;color:var(--light);margin-bottom:16px;">Dynamic movements — keep moving, don't hold these. The goal is to raise your heart rate and wake up your joints.</p>
+      <table class="ex-table">
+        <thead><tr><th>Exercise</th><th>Duration</th><th>Why</th><th>Demo</th></tr></thead>
+        <tbody>
+          <tr><td class="ex-name">Arm Circles</td><td>30 sec each direction</td><td>Opens shoulders & chest</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=arm+circles+warmup" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Hip Circles</td><td>30 sec each direction</td><td>Loosens hip flexors</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=hip+circles+warmup" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Leg Swings (front/back)</td><td>10 each leg</td><td>Activates glutes & hamstrings</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=leg+swings+dynamic+warmup" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Bodyweight Squats</td><td>10 slow reps</td><td>Activates lower body</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=bodyweight+squat+warmup" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Cat-Cow Stretch</td><td>8 reps</td><td>Warms up the spine</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=cat+cow+stretch+yoga" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Jumping Jacks or March in Place</td><td>45 sec</td><td>Raises heart rate gently</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=jumping+jacks+warmup" target="_blank">▶ Watch</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="day-block" onclick="toggleDay(this)">
+    <div class="day-header">
+      <div><div class="day-label">Post-Session · 5–8 Minutes</div><div class="day-name">Cooldown & Recovery Stretch</div></div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-content">
+      <p style="font-size:13px;color:var(--light);margin-bottom:16px;">Static holds — breathe deeply and hold each stretch. This is where flexibility improves and soreness reduces.</p>
+      <table class="ex-table">
+        <thead><tr><th>Stretch</th><th>Hold</th><th>What It Targets</th><th>Demo</th></tr></thead>
+        <tbody>
+          <tr><td class="ex-name">Chest Doorway Stretch</td><td>30 sec</td><td>Chest & front shoulders (after pressing)</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=doorway+chest+stretch" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Lat Stretch (overhead reach)</td><td>30 sec each side</td><td>Lats & upper back</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=lat+stretch+overhead" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Standing Quad Stretch</td><td>30 sec each leg</td><td>Quads & hip flexors</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=standing+quad+stretch" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Hamstring Seated Stretch</td><td>30 sec each leg</td><td>Hamstrings & lower back</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=seated+hamstring+stretch" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Hip Flexor Lunge Stretch</td><td>30 sec each side</td><td>Hip flexors (tight from sitting)</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=hip+flexor+lunge+stretch" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Child's Pose</td><td>45 sec</td><td>Lower back, shoulders, full spine</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=child's+pose+yoga+stretch" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Neck Side Stretch</td><td>20 sec each side</td><td>Neck & trap tension</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=neck+side+stretch" target="_blank">▶ Watch</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="day-block" onclick="toggleDay(this)">
+    <div class="day-header">
+      <div><div class="day-label">Rest Day · 10 Minutes</div><div class="day-name">Full Body Recovery Flow</div></div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-content">
+      <p style="font-size:13px;color:var(--light);margin-bottom:16px;">Do this on your off days — on the sofa, on your bedroom floor, anywhere. It reduces soreness and keeps you mobile.</p>
+      <table class="ex-table">
+        <thead><tr><th>Movement</th><th>Time</th><th>Benefit</th><th>Demo</th></tr></thead>
+        <tbody>
+          <tr><td class="ex-name">Legs Up the Wall</td><td>2 min</td><td>Reduces leg soreness, improves circulation</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=legs+up+the+wall+pose+recovery" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Figure-4 Glute Stretch</td><td>45 sec each side</td><td>Glutes & piriformis (tight after squats/thrusts)</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=figure+four+glute+stretch" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Supine Spinal Twist</td><td>30 sec each side</td><td>Lower back & obliques</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=supine+spinal+twist+stretch" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Foam Roll or Self-Massage</td><td>2–3 min</td><td>Breaks up muscle knots, speeds recovery</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=foam+rolling+beginners+recovery" target="_blank">▶ Watch</a></td></tr>
+          <tr><td class="ex-name">Deep Breathing (4-7-8 Method)</td><td>5 rounds</td><td>Activates recovery mode (parasympathetic nervous system)</td><td><a class="yt-btn" href="https://www.youtube.com/results?search_query=4-7-8+breathing+technique" target="_blank">▶ Watch</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- LOCK IN -->
+  <div class="section-tag" style="margin-top:48px;">Mindset & Consistency</div>
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:24px;">How to <em style="color:var(--rose);">Lock In</em></h3>
+
+  <div class="card-grid">
+    <div class="card"><span class="card-icon">📱</span><div class="card-title">Remove Friction</div><p>Pack your gym bag the night before. Put your workout clothes next to your bed. The less you have to think, the more likely you'll actually go.</p></div>
+    <div class="card"><span class="card-icon">📅</span><div class="card-title">Schedule It</div><p>Treat gym sessions like appointments you can't cancel. Put them in your calendar. "I'll go when I feel like it" almost never works long-term.</p></div>
+    <div class="card"><span class="card-icon">🎵</span><div class="card-title">Build a Ritual</div><p>Same playlist, same pre-workout tea, same order. Rituals signal to your brain that it's go-time. They reduce the mental effort of starting.</p></div>
+    <div class="card"><span class="card-icon">📊</span><div class="card-title">Track Small Wins</div><p>Use the tracker on this page. Every ticked day is proof you're doing it. Progress photos every 2 weeks often show changes the scale misses.</p></div>
+    <div class="card"><span class="card-icon">🔄</span><div class="card-title">Miss One, Not Two</div><p>Everyone misses a session. The rule is: never miss twice in a row. One missed session is a blip. Two becomes a pattern. Three becomes quitting.</p></div>
+    <div class="card"><span class="card-icon">🍽️</span><div class="card-title">Prep Once, Eat Well All Week</div><p>Cook a batch of mince, roast a tray of sweet potatoes, boil some eggs on Sunday. Having food ready removes the biggest excuse to eat badly.</p></div>
+  </div>
+
+  <div class="safety-box" style="margin-top:40px;">
+    <h3>The Bottom Line</h3>
+    <p>You don't need to be perfect — you need to be consistent. Show up 80% of the time, eat well 80% of the time, and the results will come. The other 20% is life, and that's okay. Trust the process, enjoy your food, and remember — every single session counts.</p>
+  </div>
+</section>
+
+<!-- ===== TRACKER ===== -->
+<section id="tracker" class="section">
+  <div class="section-tag">Stay Accountable</div>
+  <h2 class="section-title">Progress<br><em>Tracker</em></h2>
+  <p class="prose">Log each session, track your streak, and watch your progress build. Tap a day to mark it — data saves automatically in this browser and persists every time you reopen this file.</p>
+
+  <div class="progress-stats">
+    <div class="p-stat"><span class="p-stat-num" id="totalSessions">0</span><span class="p-stat-label">Sessions Done</span></div>
+    <div class="p-stat"><span class="p-stat-num" id="totalStreak">0</span><span class="p-stat-label">Day Streak</span></div>
+    <div class="p-stat"><span class="p-stat-num" id="weekProgress">0%</span><span class="p-stat-label">This Week</span></div>
+  </div>
+
+  <div style="margin-bottom:6px;">
+    <div style="background:var(--blush);height:6px;border-radius:3px;overflow:hidden;">
+      <div id="progressBar" style="height:100%;background:linear-gradient(90deg,var(--rose),var(--accent));border-radius:3px;width:0%;transition:width 0.5s;"></div>
+    </div>
+    <div id="progressLabel" style="font-size:11px;color:var(--light);margin-top:5px;margin-bottom:20px;">0% of 45 target sessions complete</div>
+  </div>
+
+  <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--light);margin-bottom:10px;">15-Week Grid — Tap to mark days</div>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--blush);">
+    <div style="font-size:9px;text-align:center;color:var(--light);letter-spacing:1px;">M</div>
+    <div style="font-size:9px;text-align:center;color:var(--light);letter-spacing:1px;">T</div>
+    <div style="font-size:9px;text-align:center;color:var(--light);letter-spacing:1px;">W</div>
+    <div style="font-size:9px;text-align:center;color:var(--light);letter-spacing:1px;">T</div>
+    <div style="font-size:9px;text-align:center;color:var(--light);letter-spacing:1px;">F</div>
+    <div style="font-size:9px;text-align:center;color:var(--light);letter-spacing:1px;">S</div>
+    <div style="font-size:9px;text-align:center;color:var(--light);letter-spacing:1px;">S</div>
+  </div>
+  <div class="tracker-grid" id="trackerGrid"></div>
+
+  <div style="display:flex;gap:16px;margin-bottom:40px;flex-wrap:wrap;margin-top:10px;">
+    <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mid);"><div style="width:14px;height:14px;background:var(--rose);border-radius:2px;"></div> Gym Session</div>
+    <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mid);"><div style="width:14px;height:14px;background:var(--green);border-radius:2px;"></div> Rest / Active Recovery</div>
+    <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mid);"><div style="width:14px;height:14px;background:var(--warm);border:1px solid var(--blush);border-radius:2px;"></div> Not Yet</div>
+  </div>
+
+  <div class="log-form">
+    <h3>Log a Session</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="logDate">
+      </div>
+      <div class="form-group">
+        <label>Session Type</label>
+        <select id="logType">
+          <option>Day 1 – Back & Arms</option>
+          <option>Day 2 – Lower Body & Core</option>
+          <option>Day 3 – Chest, Arms & Core</option>
+          <option>Cardio / Walk</option>
+          <option>Rest Day</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Duration (minutes)</label>
+        <input type="number" id="logDuration" placeholder="e.g. 45" min="1" max="180">
+      </div>
+      <div class="form-group">
+        <label>Energy Level</label>
+        <select id="logEnergy">
+          <option value="5">⚡⚡⚡⚡⚡ Felt Amazing</option>
+          <option value="4">⚡⚡⚡⚡ Pretty Good</option>
+          <option value="3" selected>⚡⚡⚡ Okay</option>
+          <option value="2">⚡⚡ A Bit Tired</option>
+          <option value="1">⚡ Exhausted</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label>Notes (optional)</label>
+      <textarea id="logNotes" rows="2" placeholder="How did it feel? Any PBs? Weights used?"></textarea>
+    </div>
+    <button class="btn-primary" id="saveBtn" onclick="addLog()">Save Session</button>
+  </div>
+
+  <div class="log-entries" id="logEntries"></div>
+</section>
+
+<script>
+  // ── NAV ──────────────────────────────────────────
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({top: document.querySelector('.nav-strip').offsetTop - 10, behavior: 'smooth'});
+  }
+
+  function toggleDay(el) { el.classList.toggle('open'); }
+
+  // ── INDEXEDDB STORAGE ────────────────────────────
+  const DB_NAME = 'TProgramme';
+  const DB_VER  = 1;
+  let db;
+
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, DB_VER);
+      req.onupgradeneeded = e => {
+        const d = e.target.result;
+        if (!d.objectStoreNames.contains('kv')) d.createObjectStore('kv');
+      };
+      req.onsuccess = e => { db = e.target.result; resolve(db); };
+      req.onerror   = e => reject(e);
+    });
+  }
+
+  function dbGet(key) {
+    return new Promise((resolve, reject) => {
+      const tx  = db.transaction('kv', 'readonly');
+      const req = tx.objectStore('kv').get(key);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror   = e => reject(e);
+    });
+  }
+
+  function dbSet(key, value) {
+    return new Promise((resolve, reject) => {
+      const tx  = db.transaction('kv', 'readwrite');
+      const req = tx.objectStore('kv').put(value, key);
+      req.onsuccess = () => resolve();
+      req.onerror   = e => reject(e);
+    });
+  }
+
+  // ── STATE ─────────────────────────────────────────
+  const TOTAL_DAYS = 105;
+  let dayStates = {};
+  let logs = [];
+
+  // ── TRACKER ──────────────────────────────────────
+  function buildTracker() {
+    const grid = document.getElementById('trackerGrid');
+    grid.innerHTML = '';
+    for (let i = 0; i < TOTAL_DAYS; i++) {
+      const d = document.createElement('div');
+      d.className = 'tracker-day';
+      const state = dayStates[i] || 0;
+      if (state === 1) { d.classList.add('done'); d.textContent = '✓'; }
+      if (state === 2) { d.classList.add('rest'); d.textContent = '~'; }
+      d.title = `Day ${i + 1}`;
+      d.onclick = () => cycleDay(i);
+      grid.appendChild(d);
+    }
+    updateStats();
+  }
+
+  async function cycleDay(i) {
+    dayStates[i] = ((dayStates[i] || 0) + 1) % 3;
+    await dbSet('dayStates', dayStates);
+    buildTracker();
+  }
+
+  function updateStats() {
+    const sessions = Object.values(dayStates).filter(v => v === 1).length;
+    document.getElementById('totalSessions').textContent = sessions;
+
+    let streak = 0;
+    for (let i = TOTAL_DAYS - 1; i >= 0; i--) {
+      if (dayStates[i] === 1 || dayStates[i] === 2) streak++;
+      else break;
+    }
+    document.getElementById('totalStreak').textContent = streak;
+
+    const weekDone = Array.from({length: 7}, (_, i) => dayStates[TOTAL_DAYS - 7 + i] || 0).filter(v => v > 0).length;
+    document.getElementById('weekProgress').textContent = Math.round((weekDone / 7) * 100) + '%';
+
+    const pct = Math.min(100, Math.round((sessions / 45) * 100));
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = pct + '% of 45 target sessions complete';
+  }
+
+  // ── SESSION LOG ───────────────────────────────────
+  async function addLog() {
+    const date     = document.getElementById('logDate').value;
+    const type     = document.getElementById('logType').value;
+    const duration = document.getElementById('logDuration').value;
+    const energy   = document.getElementById('logEnergy').value;
+    const notes    = document.getElementById('logNotes').value;
+    if (!date) return alert('Please select a date.');
+
+    const btn = document.getElementById('saveBtn');
+    btn.textContent = 'Saving…'; btn.disabled = true;
+
+    const entry = { date, type, duration, energy, notes, id: Date.now() };
+    logs.unshift(entry);
+    await dbSet('logs', logs);
+
+    document.getElementById('logNotes').value = '';
+    document.getElementById('logDuration').value = '';
+    btn.textContent = 'Save Session'; btn.disabled = false;
+    renderLogs();
+  }
+
+  async function deleteLog(id) {
+    logs = logs.filter(l => l.id !== id);
+    await dbSet('logs', logs);
+    renderLogs();
+  }
+
+  function renderLogs() {
+    const container = document.getElementById('logEntries');
+    if (logs.length === 0) {
+      container.innerHTML = '<p style="font-size:13px;color:var(--light);">No sessions logged yet. Add your first one above!</p>';
+      return;
+    }
+    container.innerHTML = logs.map(l => `
+      <div class="log-entry">
+        <div>
+          <div class="log-entry-date">${new Date(l.date + 'T12:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'})}</div>
+          <div class="log-entry-body">
+            <strong style="color:var(--deep)">${l.type}</strong>
+            ${l.duration ? ` · ${l.duration} min` : ''}
+            · ${'⚡'.repeat(Number(l.energy))}
+            ${l.notes ? `<br><span style="color:var(--light)">${l.notes}</span>` : ''}
+          </div>
+        </div>
+        <button class="log-delete" onclick="deleteLog(${l.id})">✕</button>
+      </div>
+    `).join('');
+  }
+
+  // ── INIT ──────────────────────────────────────────
+  openDB().then(async () => {
+    dayStates = (await dbGet('dayStates')) || {};
+    logs      = (await dbGet('logs'))      || [];
+    document.getElementById('logDate').valueAsDate = new Date();
+    buildTracker();
+    renderLogs();
+  });
+</script>
+</body>
+</html>
